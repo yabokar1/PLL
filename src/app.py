@@ -17,7 +17,7 @@ def mapping(user_text,anonymized_text):
     for index,item in enumerate(anonymized_list):
         if item == '<PERSON>':
             mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
-        if item == '<US_BANK_NUMBER>':
+        if item == '<US_BANK_NUMBER>' or item == '<US_PASSPORT>':
              mapping_dict[item] = f'{user_list[index + 1]}'
 
     
