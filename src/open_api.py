@@ -1,11 +1,10 @@
 from openai import OpenAI
-from config import Config
+from openai_config import Config
 
 
 
 
 def open_ai_request(text):
-    print(Config.API_KEY)
     client = OpenAI(
     # defaults to os.environ.get("OPENAI_API_KEY")
     api_key=Config.API_KEY,
@@ -15,7 +14,7 @@ def open_ai_request(text):
     messages=[
         {
             "role": "user",
-            "content": "Write a short university(2 short paragraphs) letter for academic probation and only use the following personal data enclosed in <>:" + text,
+            "content": "Write a short university(2 short paragraphs) letter from academic probation  and only use the following personal data enclosed in <>:" + text,
               
         }
     ],

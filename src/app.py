@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template
 import requests
-import re
 from open_api import open_ai_request
 
 app = Flask(__name__)
