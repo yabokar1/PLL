@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 import requests
-from openai.api import prompt
+from service.api import prompt
 
 app = Flask(__name__)
 
@@ -29,9 +29,9 @@ def mapping(user_text,anonymized_text):
 def anonymize():
     user_text = request.form['text']
     anonymized_text, mapping_text = call_presidio(user_text)
-    
-
+   
     return render_template('result.html', anonymized_text=anonymized_text, mapping_text=mapping_text)
+    
 
 def call_presidio(text):
     analyze_url = 'http://localhost:5001/analyze'  # Presidio Analyzer URL
