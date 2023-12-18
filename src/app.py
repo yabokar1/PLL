@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 import requests
-from open_api import open_ai_request
+from openai.api import prompt
 
 app = Flask(__name__)
 
@@ -52,7 +52,7 @@ def call_presidio(text):
             return f"Error in anonymization: {anonymize_response.text}"
         
         anonymize_text = anonymize_response.json().get('text', 'No text returned from anonymization')
-        response_text = open_ai_request(anonymize_text)
+        response_text = prompt(anonymize_text)
         mapping_text = response_text[:]
         mapping_dict = mapping(text,anonymize_text)
       
