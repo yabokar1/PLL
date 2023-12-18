@@ -16,7 +16,7 @@ def mapping(user_text,anonymized_text):
     for index,item in enumerate(anonymized_list):
         if item == '<PERSON>':
             mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
-        if item == '<US_BANK_NUMBER>' or item == '<US_PASSPORT>':
+        if item == '<STUDENT_ID>':
              mapping_dict[item] = f'{user_list[index + 1]}'
 
     
@@ -37,9 +37,68 @@ def call_presidio(text):
     analyze_url = 'http://localhost:5001/analyze'  # Presidio Analyzer URL
     anonymize_url = 'http://localhost:5002/anonymize'  # Presidio Anonymizer URL
 
+    student_id_recognizer = {
+        "name": "student_id_pattern",
+        "supported_language": "en",
+        "patterns": [
+            {"name": "student_id_pattern", "regex": r"\b\d{9}\b", "score": 0.9}
+        ],
+        "context": ["student", "id", "number"],
+        "supported_entity": "STUDENT_ID"
+    }
+
+    # Faculty ID Recognizer
+    faculty_id_recognizer = {
+        "name": "faculty_id_pattern",
+        "supported_language": "en",
+        "patterns": [
+            {"name": "faculty_id_pattern", "regex": r"\b1\d{8}\b", "score": 0.85}
+        ],
+        "context": ["faculty", "id", "number"],
+        "supported_entity": "FACULTY_ID"
+    }
+
+    # SIN Recognizer
+    sin_recognizer = {
+        "name": "sin_pattern",
+        "supported_language": "en",
+        "patterns": [
+            {"name": "sin_pattern", "regex":r"\b\d{3}-\d{3}-\d{3}\b", "score": 0.8}
+        ],
+        "context": ["social", "insurance", "number", "SIN"],
+        "supported_entity": "SIN"
+    }
+
+    # Medical Records Recognizer
+    medical_records_recognizer = {
+        "name": "medical_records_pattern",
+        "supported_language": "en",
+        "patterns": [
+            {"name": "medical_records_pattern", "regex": r"\b\d{6,10}\b", "score": 0.7}
+        ],
+        "context": ["medical", "record", "number"],
+        "supported_entity": "MEDICAL_RECORD"
+    }
+
+    passport_id_recognizer = {
+        "name": "passport_id_pattern",
+        "supported_language": "en",
+        "patterns": [
+            {"name": "passport_id_pattern", "regex": r"\b[A-Z]{1,2}\d{5,9}\b", "score": 0.8}
+        ],
+        "context": ["passport", "id", "number"],
+        "supported_entity": "PASSPORT_ID"
+    }
+
     try:
         # First, analyze the text with the specified language
-        analyze_response = requests.post(analyze_url, json={"text": text, "language": "en"})
+        analyze_response = requests.post(analyze_url, json={"text": text, "language": "en", "ad_hoc_recognizers": [
+                student_id_recognizer, 
+                faculty_id_recognizer, 
+                sin_recognizer, 
+                medical_records_recognizer,
+                passport_id_recognizer 
+            ]})
         if analyze_response.status_code != 200:
             return f"Error in analysis: {analyze_response.text}"
 
