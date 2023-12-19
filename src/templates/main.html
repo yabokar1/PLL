@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anonymize Text</title>
+    <link rel="stylesheet" href="static/styles/main.css"> <!-- Link to your CSS file -->
 </head>
 <body>
-    <h1>Text Anonymization Tool</h1>
-    <form action="/anonymize" method="post">
-        <textarea name="text" rows="4" cols="50" placeholder="Enter text here..."></textarea>
-        <br>
-        <input type="submit" value="Anonymize">
-    </form>
+    <div class="container"> <!-- Added a container for centering -->
+        <h1>Text Anonymization Tool</h1>
+        <form action="/anonymize" method="post">
+            <textarea name="text" rows="4" cols="50" placeholder="Enter text here..." class="text-box"></textarea>
+            <br>
+            <input type="submit" value="Anonymize" class="submit-button">
+        </form>
+    </div>
 </body>
 </html>

@@ -9,15 +9,27 @@ def index():
     # Renders the HTML form page
     return render_template('./main.html')
 
-def mapping(user_text,anonymized_text):
+def mapping(user_text, anonymized_text):
     user_list = user_text.split(' ')
     anonymized_list = anonymized_text.split(' ')
     mapping_dict = dict()
-    for index,item in enumerate(anonymized_list):
+
+    for index, item in enumerate(anonymized_list):
         if item == '<PERSON>':
             mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
-        if item == '<STUDENT_ID>':
-             mapping_dict[item] = f'{user_list[index + 1]}'
+        elif item == '<STUDENT_ID>':
+            mapping_dict[item] = user_list[index + 1]
+        elif item == '<FACULTY_ID>':
+            mapping_dict[item] = user_list[index + 1]
+        elif item == '<SIN>':
+            mapping_dict[item] = user_list[index + 1]
+        elif item == '<MEDICAL_RECORD>':
+            mapping_dict[item] = user_list[index + 1]
+        elif item == '<PASSPORT_ID>':
+            mapping_dict[item] = user_list[index + 1]
+
+    return mapping_dict
+            
 
     
     print(anonymized_list)

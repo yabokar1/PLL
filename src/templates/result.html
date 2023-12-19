@@ -7,12 +7,18 @@
     <title>Anonymized Text</title>
 </head>
 <body>
-    <h1>Anonymized Text</h1>
-    <p>{{ anonymized_text }}</p>
-    <br>
-    <h1>Non-Anonymized Text</h1>
-    <p>{{ mapping_text }}</p>
+    <div class="container">
+        <h1>Anonymized Text</h1>
+        <div class="text-box">
+            <p>{{ anonymized_text }}</p>
+        </div>
+        
+        <h1>Non-Anonymized Text</h1>
+        <div class="text-box">
+            <p>{{ mapping_text }}</p>
+        </div>
 
-    <a href="/">Go Back</a>
+        <a href="/" class="back-button">Go Back</a>
+    </div>
 </body>
 </html>
