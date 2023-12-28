@@ -9,30 +9,69 @@ medical_records_recognizer,
 passport_id_recognizer,
 )
 
-def mapping(user_text,anonymized_text):
-    user_list = user_text.split(' ')
-    anonymized_list = anonymized_text.split(' ')
-    mapping_dict = dict()
-    for index,item in enumerate(anonymized_list):
-        if item == '<PERSON>':
-            mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
-        if item == '<STUDENT_ID>':
-             mapping_dict[item] = f'{user_list[index + 1]}'
 
+def generate_entity_dict(user_text):
+    user_text_list = user_text.split(' ')
+    entity_dict = {}
+    print(user_text_list)
+    for index,item in enumerate(user_text_list):
+        if item == 'name':
+            name = user_text_list[index + 2] + " " + user_text_list[index + 3]
+            entity_dict['<PERSON>'] = name
+        if item == 'student':
+            student_id = user_text_list[index + 3]
+            entity_dict['<STUDENT_ID>'] = student_id
+        if item == 'SIN':
+            sin_id = user_text_list[index + 3]
+            entity_dict['<SIN>'] = sin_id
+        if item == 'passport':
+            passport_id = user_text_list[index + 3]
+            entity_dict['<PASSPORT_ID>'] = passport_id
+
+    return entity_dict
+
+
+def deanonymize_data(user_text, anonymized_text):
     
-    # print(anonymized_list)
-    # print(user_list)
-    # print(mapping_dict)
-    return mapping_dict
+    anonymized_list = anonymized_text.split(' ')
+    entity_dict = generate_entity_dict(user_text)
+
+    for index, item in enumerate(anonymized_list):
+        item = item.strip()
+
+        # print(item, "after", sep='-')
+        if item == '<PERSON>':
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<PERSON>'] 
+        if item == '<PERSON>,\n\nWe':
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<PERSON>'] + ',We'
+        if item == '<PERSON>,\n\nI':
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<PERSON>'] + ',I'
+        if item == '<STUDENT_ID>,' or item == '<STUDENT_ID>':
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<STUDENT_ID>'] 
+        if item == '<PASSPORT_ID>\n\n' or item == '<PASSPORT_ID>.\n\n' or item == '<PASSPORT_ID>' or item == '<PASSPORT_ID>.':
+            print("YES PASSPORT")
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<PASSPORT_ID>'] 
+        if item == '<SIN>':
+            index = anonymized_list.index(item)
+            anonymized_list[index] = entity_dict['<SIN>'] 
+
+        
+
+    anonymized_text = ' '.join(anonymized_list)
+    print("The anonmyized text is " , anonymized_text)
+    return anonymized_text
 
 
 
-def anonymize(text):
-    # analyze_url = 'http://localhost:5001/analyze'  # Presidio Analyzer URL
-    # anonymize_url = 'http://localhost:5002/anonymize'  # Presidio Anonymizer URL
+def anonymize_data(user_text,user_prompt):
     try:
         # First, analyze the text with the specified language
-        analyze_response = requests.post(AppConfig.ANALYZE_URL, json={"text": text, 
+        analyze_response = requests.post(AppConfig.ANALYZE_URL, json={"text": user_text, 
         "language": "en", "ad_hoc_recognizers": [
                 student_id_recognizer, 
                 faculty_id_recognizer, 
@@ -45,34 +84,21 @@ def anonymize(text):
 
         # Then, anonymize the text using the analysis results
         anonymize_response = requests.post(AppConfig.ANONYMIZE_URL, json={
-            "text": text,
+            "text": user_text,
             "analyzer_results": analyze_response.json()
         })
         if anonymize_response.status_code != 200:
             return f"Error in anonymization: {anonymize_response.text}"
+        anonymize_text = anonymize_response.json().get('text', 'No text returned from anonymization')
+        response_text = prompt(anonymize_text,user_prompt)
         
-        return anonymize_response
+        return response_text
         
     
     except requests.exceptions.RequestException as e:
         return f"Request failed: {e}"
 
     
-
-def deanonymize(user_text,anonymize_text):
-
-    anonymize_text = anonymize_text.json().get('text', 'No text returned from anonymization')
-    response_text = prompt(anonymize_text)
-    mapping_text = response_text[:]
-    mapping_dict = mapping(user_text,anonymize_text)
-    
-    for item in mapping_dict:
-        # print(item, mapping_dict[item])
-        mapping_text = mapping_text.replace(item, mapping_dict[item])
-
-    # print(mapping_text)
-
-
 
 def call_presidio(text):
     analyze_url = 'http://localhost:5001/analyze'  # Presidio Analyzer URL
@@ -116,16 +142,23 @@ def call_presidio(text):
         return f"Request failed: {e}"
     
 
-def prompt(text):
+def prompt(anonymize_text,user_prompt):
+
+    template =  """ Dear <PERSON>,
+    I hope this letter finds you well. We regret to inform you that based on your recent academic performance, you have been placed on academic probation. This decision has been made after careful review of your grades and progress during the previous semester. Our records indicate that your student ID is <STUDENT_ID>, and we would appreciate your immediate attention to rectify the situation. Academic probation is a serious matter, and we strongly encourage you to seek assistance from our academic advisors and support services to improve your standing. Please reach out to our office as soon as possible to schedule a meeting and discuss a plan for your academic success. We are confident that with the right support, you can overcome this setback and work towards achieving your full potential.
+    Furthermore, we kindly request that you update your personal details with our office. In particular, we would appreciate it if you could provide us with your SIN id and passport number for documentation purposes. This will enable us to keep accurate records and assist you more effectively throughout your academic journey. Your cooperation in this matter is greatly appreciated.
+    Once again, we understand that being on academic probation may be disheartening, but we are here to support you. Don't hesitate to seek help from our dedicated faculty and resources. Together, we can help you regain your academic standing and ensure your success at our university. """
 
     client = OpenAI(api_key=AppConfig.API_KEY,)
-    template = "Write a short university(2 short paragraphs) letter from academic probation \
-    and only use the following personal data enclosed in <>:"
+    message = "Write a short university(2 short paragraphs) in Canadian French letter from academic probation \
+    and only use the following personal data enclosed in <> such as <PERSON> " + template
 
+    # message = user_prompt + "<PERSON>" + template 
 
-    user_detail =  {"role": "user","content": template + text,}
+    print(f'The user prompt is : {user_prompt}' )
     
-
+    user_detail =  {"role": "user","content": message + anonymize_text,}
+    
     chat_completion = client.chat.completions.create(
     messages=[ user_detail],
     model="gpt-3.5-turbo",
@@ -133,5 +166,47 @@ def prompt(text):
     answer = chat_completion.choices[0].message.content  
     return answer
 
+
+
+# def deanonymize(user_text,anonymize_text):
+
+#     # response_text = prompt(anonymize_text)
+#     mapping_text = anonymize_text[:]
+#     mapping_dict = mapping(user_text,anonymize_text)
+    
+#     for item in mapping_dict:
+#         # print(item, mapping_dict[item])
+#         print(item, mapping_dict[item])
+#         mapping_text = mapping_text.replace(item, mapping_dict[item])
+
+    # print(mapping_text)
+
+
+# def mapping(user_text, anonymized_text):
+    
+#     user_list = user_text.split(' ')
+#     anonymized_list = anonymized_text.split(' ')
+#     print(anonymized_list)
+#     mapping_dict = dict()
+#     item = item.rstrip().replace("\n","")
+#     print(item, "after", sep='-')
+#     ex = '<PERSON>,\n\nWe'.replace("\n","")
+#     for index, item in enumerate(anonymized_list):
+#         item = item.rstrip().replace("\n","")
+#         if item == '<PERSON>':
+#             mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
+#             #    print("Enter")
+#         elif item == '<STUDENT_ID>':
+#             mapping_dict[item] = user_list[index + 1]
+#         elif item == '<FACULTY_ID>':
+#             mapping_dict[item] = user_list[index + 1]
+#         elif item == '<SIN>':
+#             mapping_dict[item] = user_list[index + 1]
+#         elif item == '<MEDICAL_RECORD>':
+#             mapping_dict[item] = user_list[index + 1]
+#         elif item == '<PASSPORT_ID>':
+#             mapping_dict[item] = user_list[index + 1]
+#     print("dict",mapping_dict)
+#     return mapping_dict
     
 

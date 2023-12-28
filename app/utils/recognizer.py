@@ -50,3 +50,4 @@ passport_id_recognizer = {
         "context": ["passport", "id", "number"],
         "supported_entity": "PASSPORT_ID"
 }
+

@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif; /* Modern font */
+    background:white;
+    color: white; /* Darker text for readability */
+    display: flex;
+    justify-content: center; /* Center container horizontally */
+    align-items: center; /* Center container vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    text-align: center; /* Center text */
+    padding: 20px;
+    background-color:#00008B; /* White background for the container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+    width: 80%; /* Responsive width */
+    max-width: 500px; /*Max width*/
+}
+
+.text-box {
+    width: 100%; /* Full width */
+    padding: 10px;
+    margin-top: 20px; /* Increased top margin */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+#TemplatePrompt {
+    background-color: #e8f0fe; /* Light blue background */
+    color: #333; /* Dark text for readability */
+    font-style: italic; /* Italic font for distinction */
+    border: 1px solid #aac4e5; /* Light blue border */
+    margin-bottom: 20px; /* Added bottom margin */
+}
+
+label {
+    display: block; /* Make label a block element */
+    margin-top: 20px; /* Space above labels */
+    font-weight: bold; /* Bold label text */
+}
+
+.submit-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px;
+    margin-top: 30px; /* Increased space above button */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.submit-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}

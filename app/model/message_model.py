@@ -9,17 +9,17 @@ class Message:
         self.db = Database().get_client()['PLL']['Messages']
 
 
-    def save(self):
+    def save(self,anonmyized, deanonmyized):
         data = {
-            'prompt': "This is the question ...",
-            'answer': "This is the answer ..."
+            'anonmyized': anonmyized,
+            'deanonmyized': deanonmyized
         }
         result = self.db.insert_one(data)
         return str(result.inserted_id)
   
     def get_all_messages(self):
         messages = self.db.find()
-        return [{'prompt': message['prompt'], 'answer': message['answer']} for message in messages]
+        return [{'anonmyized': message['anonmyized'], 'deanonmyized': message['deanonmyized']} for message in messages]
 
     def get_message_by_id(self,id):
         object_id = ObjectId(id)

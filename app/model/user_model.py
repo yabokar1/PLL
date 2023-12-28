@@ -2,6 +2,7 @@ import sys
 sys.path.append('/Users/yonisabokar/IBM_Data_AI/PLL')
 from app.config.database import Database
 from bson.objectid import ObjectId
+import bcrypt
 
 class User:
     
@@ -9,23 +10,25 @@ class User:
         self.db = Database().get_client()['PLL']['User']
 
 
-    def save(self):
+    def save(self,firstname,lastname,username,password):
+        password = password.encode('utf-8')
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
         data = {
-            'firstname': "",
-            'lastname': "",
-            'username': "",
-            'password': "",
+            'firstname': firstname,
+            'lastname': lastname,
+            'email': username,
+            'password': hashed_password,
         }
         result = self.db.insert_one(data)
         return str(result.inserted_id)
   
     def get_all_users(self):
         users = self.db.find()
-        return [{'firstname': user['firstname'], 'lastname': user['lastname'], 'username': user['username'], 'password': 
+        return [{'firstname': user['firstname'], 'lastname': user['lastname'], 'email': user['email'], 'password': 
                  user['password'] } for user in users]
 
-    def get_user_by_credentials(self,username,password):
-        user = self.db.find_one({'username': username, 'password': password})
+    def get_credentials(self,username):
+        user = self.db.find_one({'email': username})
         return user
 
     def update_user(self,id,user_update):
@@ -34,7 +37,7 @@ class User:
         return result.modified_count > 0
 
     def delete(self,username):
-        result = self.delete_one({'username': username})
+        result = self.delete_one({'email': username})
         return result.deleted_count > 0
     
 
@@ -42,12 +45,12 @@ class User:
 if __name__ == "__main__":
 
     try:
-        username = ''
-        user_table = User()
-        user_messages = user_table.get_all_users()
+        # username = ''
+        user = User()
+        user.save('Yonis','Abokar','yabokar@gmail.com','Messenger1!')
+        user_messages = user.get_all_users()
         print(user_messages)
-        message = user_table.get_user_by_name(id)
-        print(message)
+
 
     except Exception as e:
             print(e)

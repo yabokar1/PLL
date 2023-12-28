@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel= "stylesheet" type= "text/css" href= "static/styles/result.css">
+    <link rel="stylesheet" type="text/css" href="static/styles/result.css">
     <title>Anonymized Text</title>
 </head>
 <body>
-    <h1>Anonymized Text</h1>
-    <p>{{ anonymized_text }}</p>
-    <br>
-    <h1>Non-Anonymized Text</h1>
-    <p>{{ mapping_text }}</p>
-
-    <a href="/">Go Back</a>
+    <div class="container">
+        <div class="text-box-container">
+            <div class="text-box">
+                <h1>Anonymized Text</h1>
+                <p>{{ anonymized_text }}</p>
+            </div>
+            <div class="arrow">&#8594;</div> <!-- Right arrow -->
+            <div class="text-box">
+                <h1>Non-Anonymized Text</h1>
+                <p>{{ mapping_text }}</p>
+            </div>
+        </div>
+        <a href="/" class="back-button">Go Back</a>
+    </div>
 </body>
 </html>
