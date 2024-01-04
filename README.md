@@ -1,5 +1,4 @@
-# PLL
-Private Large Language Model
+# Private Large Language Model
 
 Set Up the Project
 
