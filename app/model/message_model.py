@@ -9,10 +9,11 @@ class Message:
         self.db = Database().get_client()['PLL']['Messages']
 
 
-    def save(self,anonmyized, deanonmyized):
+    def save(self,anonmyized,deanonmyized,prompt):
         data = {
             'anonmyized': anonmyized,
-            'deanonmyized': deanonmyized
+            'deanonmyized': deanonmyized,
+            'prompt': prompt
         }
         result = self.db.insert_one(data)
         return str(result.inserted_id)

@@ -150,8 +150,7 @@ def prompt(anonymize_text,user_prompt):
     Once again, we understand that being on academic probation may be disheartening, but we are here to support you. Don't hesitate to seek help from our dedicated faculty and resources. Together, we can help you regain your academic standing and ensure your success at our university. """
 
     client = OpenAI(api_key=AppConfig.API_KEY,)
-    message = "Write a short university(2 short paragraphs) in Canadian French letter from academic probation \
-    and only use the following personal data enclosed in <> such as <PERSON> " + template
+    message = user_prompt + template
 
     # message = user_prompt + "<PERSON>" + template 
 

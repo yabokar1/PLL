@@ -23,19 +23,21 @@ def anonymize():
     deanonymize_text = deanonymize_data(user_text,anonymize_text)
     print(anonymize_text)
     print(deanonymize_text)
-    save_message(anonymize_text, deanonymize_text)
+    save_message(anonymize_text,deanonymize_text,user_prompt)
 
 
     return render_template('result.html', anonymized_text=anonymize_text, mapping_text=deanonymize_text)
 
 
-def save_message(text_1, text_2):
+def save_message(text_1, text_2, text_3):
     hash_anonymize = text_1.encode('utf-8')
     hash_deanonymize = text_2.encode('utf-8')
+    hash_prompt = text_2.encode('utf-8')
     hash_anonymize = bcrypt.hashpw(hash_anonymize, bcrypt.gensalt())
     hash_deanonymize = bcrypt.hashpw(hash_deanonymize, bcrypt.gensalt())
+    hash_prompt = bcrypt.hashpw(hash_prompt, bcrypt.gensalt())
     message_table = Message()
-    message_table.save(hash_anonymize, hash_deanonymize)
+    message_table.save(hash_anonymize,hash_deanonymize,hash_prompt)
 
 
 
