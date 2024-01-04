@@ -7,11 +7,18 @@
     <link rel="stylesheet" href="static/styles/main.css"> <!-- Link to your CSS file -->
 </head>
 <body>
-    <div class="container"> <!-- Added a container for centering -->
+    <div class="container">
         <h1>Text Anonymization Tool</h1>
         <form action="/anonymize" method="post">
             <textarea name="text" rows="4" cols="50" placeholder="Enter text here..." class="text-box"></textarea>
             <br>
+
+            <label for="TemplatePrompt">Prompt</label>
+            <textarea id="TemplatePrompt" name="TemplatePrompt" rows="6" cols="50" class="text-box" readonly>
+Write a short university letter from university (York University) to a student, informing them of failing in a subject and their inability to attend any courses and use a similar template to this 'Dear Student's Name, I hope this letter finds you in good health. It is with a heavy heart that I must inform you of your failure to meet the academic standards required at York University. This decision has been made after careful consideration of your overall academic performance. As a consequence, in line with our academic policies, you will be unable to enroll in any courses for the upcoming semester. This period should be used to reflect on your academic goals and strategies for improvement. York University is committed to supporting its students, and we encourage you to take this time to focus on your academic development. Please feel free to reach out to me or the university's student support services for further guidance and assistance. We are here to help you navigate this challenging phase and prepare for a successful return to your studies. Sincerely, York University' and use the following personal data enclosed in <>:
+            </textarea>
+            <br>
+
             <input type="submit" value="Anonymize" class="submit-button">
         </form>
     </div>

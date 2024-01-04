@@ -136,7 +136,7 @@ def call_presidio(text):
       
         return response_text, mapping_text
     except requests.exceptions.RequestException as e:
-        return f"Request failed: {e}"
+        return f"Request failed: {e}",""
 
 if __name__ == '__main__':
     app.run(debug=True)
