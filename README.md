@@ -1,4 +1,4 @@
-# Private Large Language Model
+# SafeGPT
 
 Set Up the Project
 
