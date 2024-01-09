@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - presidio-analyzer
+      - presidio-anonymizer
+      - mongodb
+    environment:
+      USER: ${USER}
+      PASSWORD: ${PASSWORD}
+      OPEN_AI: ${OPEN_AI}
+      MONGO_URI: ${MONGO_URI}  # Assuming you set this variable for MongoDB connection
+
+  presidio-analyzer:
+    image: mcr.microsoft.com/presidio-analyzer:latest
+    ports:
+      - "5001:3000"
+
+  presidio-anonymizer:
+    image: mcr.microsoft.com/presidio-anonymizer:latest
+    ports:
+      - "5002:3000"
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
