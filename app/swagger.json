@@ -1,0 +1,157 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swagger PLL",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/anonmyize_1": {
+      "post": {
+        "summary": "Generate custom PLL recognizers from Presidio ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anonymized input": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "anonymized input": "Sample text"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/response_1": {
+      "post": {
+        "summary": "Generate custom anonmyized response from LLM",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input prompt": {
+                    "type": "string"
+                  },
+                  "pll entities": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "input prompt": "Sample input prompt",
+                  "pll entities": "Sample pll entities"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/response_2": {
+      "post": {
+        "summary": "Map custom private entities in LLM response",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anonymized input": {
+                    "type": "string"
+                  },
+                  "model response": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "anonymized input": "Sample input",
+                  "model response": "Sample response"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/anonmyize_2": {
+      "post": {
+        "summary": "Generate custom PLL recognizers using Llama 7B Model",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "anonymized input": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "anonymized input": "Sample text"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

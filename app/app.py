@@ -6,6 +6,8 @@ from flask import Flask, request, render_template, redirect, url_for
 from app.utils.helper import anonymize_data, deanonymize_data
 from app.model.message_model import Message
 from app.model.user_model import User
+from app.config.setting import AppConfig
+import logging
 
 
 app = Flask(__name__)
@@ -23,9 +25,6 @@ def anonymize():
     deanonymize_text = deanonymize_data(user_text,anonymize_text)
     print(anonymize_text)
     print(deanonymize_text)
-    save_message(anonymize_text,deanonymize_text,user_prompt)
-
-
     return render_template('result.html', anonymized_text=anonymize_text, mapping_text=deanonymize_text)
 
 
@@ -61,17 +60,25 @@ def login():
     email = request.form['email']
     # include password in the credential check
     password = request.form['password']
-    password = password.encode('utf-8')
-    password = bcrypt.hashpw(password, bcrypt.gensalt())
-    print(email)
+    # password = password.encode('utf-8')
+    # password = bcrypt.hashpw(password, bcrypt.gensalt())
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.DEBUG)
+    app.logger.info("The email is ", email)
+    app.logger.info("The password is ", password)
+    app.logger.info("The setting user is", AppConfig.USER)
+    app.logger.info("The setting password is", AppConfig.PASSWORD)
+
     user_table = User()
     user = user_table.get_credentials(email)
-    print(user)
+    app.logger.info("The user table is", user['email'] )
 
     if user['email'] == email:
+        app.logger.info("Entered In")
         return render_template('./main.html')
     else:
         return render_template('./login.html')
+    # return render_template('./main.html')
 
 
 

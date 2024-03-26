@@ -59,9 +59,7 @@ def deanonymize_data(user_text, anonymized_text):
         if item == '<SIN>':
             index = anonymized_list.index(item)
             anonymized_list[index] = entity_dict['<SIN>'] 
-
-        
-
+            
     anonymized_text = ' '.join(anonymized_list)
     print("The anonmyized text is " , anonymized_text)
     return anonymized_text
@@ -97,17 +95,14 @@ def anonymize_data(user_text,user_prompt):
     
     except requests.exceptions.RequestException as e:
         return f"Request failed: {e}"
-
     
 
-def call_presidio(text):
-    analyze_url = 'http://localhost:5001/analyze'  # Presidio Analyzer URL
-    anonymize_url = 'http://localhost:5002/anonymize'  # Presidio Anonymizer URL
 
-
+def presidio(user_text):
     try:
         # First, analyze the text with the specified language
-        analyze_response = requests.post(analyze_url, json={"text": text, "language": "en", "ad_hoc_recognizers": [
+        analyze_response = requests.post("http://172.17.0.2:3000/analyze", json={"text": user_text, 
+        "language": "en", "ad_hoc_recognizers": [
                 student_id_recognizer, 
                 faculty_id_recognizer, 
                 sin_recognizer, 
@@ -118,29 +113,22 @@ def call_presidio(text):
             return f"Error in analysis: {analyze_response.text}"
 
         # Then, anonymize the text using the analysis results
-        anonymize_response = requests.post(anonymize_url, json={
-            "text": text,
+        anonymize_response = requests.post('http://172.17.0.3:3000/anonymize', json={
+            "text": user_text,
             "analyzer_results": analyze_response.json()
         })
         if anonymize_response.status_code != 200:
             return f"Error in anonymization: {anonymize_response.text}"
-        
         anonymize_text = anonymize_response.json().get('text', 'No text returned from anonymization')
-        response_text = prompt(anonymize_text)
-        mapping_text = response_text[:]
-        mapping_dict = mapping(text,anonymize_text)
-      
-        for item in mapping_dict:
-        #    print(item, mapping_dict[item])
-           mapping_text = mapping_text.replace(item, mapping_dict[item])
-
-        # print(mapping_text)
-
-      
-        return response_text, mapping_text
+        return anonymize_text
+        
+    
     except requests.exceptions.RequestException as e:
         return f"Request failed: {e}"
+
     
+
+# 
 
 def prompt(anonymize_text,user_prompt):
 
@@ -165,47 +153,4 @@ def prompt(anonymize_text,user_prompt):
     answer = chat_completion.choices[0].message.content  
     return answer
 
-
-
-# def deanonymize(user_text,anonymize_text):
-
-#     # response_text = prompt(anonymize_text)
-#     mapping_text = anonymize_text[:]
-#     mapping_dict = mapping(user_text,anonymize_text)
-    
-#     for item in mapping_dict:
-#         # print(item, mapping_dict[item])
-#         print(item, mapping_dict[item])
-#         mapping_text = mapping_text.replace(item, mapping_dict[item])
-
-    # print(mapping_text)
-
-
-# def mapping(user_text, anonymized_text):
-    
-#     user_list = user_text.split(' ')
-#     anonymized_list = anonymized_text.split(' ')
-#     print(anonymized_list)
-#     mapping_dict = dict()
-#     item = item.rstrip().replace("\n","")
-#     print(item, "after", sep='-')
-#     ex = '<PERSON>,\n\nWe'.replace("\n","")
-#     for index, item in enumerate(anonymized_list):
-#         item = item.rstrip().replace("\n","")
-#         if item == '<PERSON>':
-#             mapping_dict[item] = f'{user_list[index]} {user_list[index + 1]}'
-#             #    print("Enter")
-#         elif item == '<STUDENT_ID>':
-#             mapping_dict[item] = user_list[index + 1]
-#         elif item == '<FACULTY_ID>':
-#             mapping_dict[item] = user_list[index + 1]
-#         elif item == '<SIN>':
-#             mapping_dict[item] = user_list[index + 1]
-#         elif item == '<MEDICAL_RECORD>':
-#             mapping_dict[item] = user_list[index + 1]
-#         elif item == '<PASSPORT_ID>':
-#             mapping_dict[item] = user_list[index + 1]
-#     print("dict",mapping_dict)
-#     return mapping_dict
-    
 
