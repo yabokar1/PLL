@@ -2,16 +2,17 @@ import sys
 # sys.path.append('/Users/yonisabokar/IBM_Data_AI/PLL')
 # sys.path.append('/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages')
 import bcrypt
-from flask import Flask, request, render_template, redirect, url_for
-from app.utils.helper import anonymize_data, deanonymize_data
+from flask import Flask, request, render_template, redirect, url_for, jsonify
+from app.utils.helper import anonymize_data
 from app.model.message_model import Message
 from app.model.user_model import User
 from app.config.setting import AppConfig
+from flask_cors import CORS, cross_origin
 import logging
 
 
 app = Flask(__name__)
-
+CORS(app, support_credentials=True)
 @app.route('/')
 def index():
     return render_template('./login.html')
@@ -19,13 +20,29 @@ def index():
 
 @app.route('/anonymize', methods=['POST'])
 def anonymize():
-    user_text = request.form['text']
-    user_prompt = request.form['prompt']
-    anonymize_text = anonymize_data(user_text,user_prompt)
-    deanonymize_text = deanonymize_data(user_text,anonymize_text)
+    print("Entered")
+    print(request.get_json())
+    user_data = request.get_json().get('data')
+    user_input = request.get_json().get('input')
+    print(user_data)
+    print(user_input)
+    anonymize_text = anonymize_data(user_data, user_input)
+    # deanonymize_text = deanonymize_data(user_text,anonymize_text)
     print(anonymize_text)
-    print(deanonymize_text)
-    return render_template('result.html', anonymized_text=anonymize_text, mapping_text=deanonymize_text)
+    response = {"message": anonymize_text }
+    return jsonify(response)
+    
+
+
+def chatgpt_response():
+    pass
+
+
+def llama2_response():
+    pass
+
+
+  
 
 def save_message(text_1, text_2, text_3):
     hash_anonymize = text_1.encode('utf-8')
