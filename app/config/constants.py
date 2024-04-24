@@ -1,0 +1,17 @@
+CONTEXT_RESPONSE = """and only use the following personal data enclosed in <> such as <NAME>. For example do not know Saorise but replace with <NAME>
+                 Make sure the letter does not have personal data such as Name, SIN, Phone number and 
+                 replace mentioned information with <NAME> <STUDENT_ID> <SIN> <PHONE>""" 
+                 
+CONTEXT_DATASET = """
+                    Generate 10 data points similar to the following format for only these dataset features, but the personal identifiers should be different and unique for all data points and should have variations while keeping the structure the same. Make sure all the personal identifiers are different for all the data points that will be generated. Refer from these examples and don't include Data Point 1: or any Data Point N in the response and include \\{\\} between dataset responses:
+                    {
+                        "text": "### Task: Anonymize the personal information in the following text and output in the specified format. ### Input: 'Grace Lewis, identified by student ID 101036, SIN 475432109, email ID grace.lewis@collegenet.edu, passport number UVWX67961, and phone number 595-901-2345, has not met her academic goals in psychology. The university is set to issue a direct academic probation letter.' ### Format: '<NAME>:Name, <STUDENT_ID>:ID, <SIN>:Number, <EMAIL_ID>:Email, <PASSPORT>:Passport Number, <PHONE>:Phone Number' ### Expected Output: '<NAME>:Grace Lewis, <STUDENT_ID>:101036, <SIN>:475432109, <EMAIL_ID>:grace.lewis@collegenet.edu, <PASSPORT>:UVWX67961, <PHONE>:595-901-2345'"
+                    },
+                    {
+                        "text": "### Task: Anonymize the personal information in the following text and output in the specified format. ### Input: 'Zachary Wilson, student ID 102137, SIN 586543210, email ID zachary.wilson@academyhub.net, passport number ABCD67962, and contact number 595-012-3456, has consistently underperformed in his literature studies. An immediate and succinct academic probation letter will now be executed.' ### Format: '<NAME>:Name, <STUDENT_ID>:ID, <SIN>:Number, <EMAIL_ID>:Email, <PASSPORT>:Passport Number, <PHONE>:Phone Number' ### Expected Output: '<NAME>:Zachary Wilson, <STUDENT_ID>:102137, <SIN>:586543210, <EMAIL_ID>:zachary.wilson@academyhub.net, <PASSPORT>:ABCD67962, <PHONE>:595-012-3456'"
+                    },
+                    {
+                        "text": "### Task: Anonymize the personal information in the following text and output in the specified format. ### Input: 'Lily Evans, with student ID 103238, SIN 697654321, email ID lily.evans@univsphere.com, passport number EFGH67963, and phone number 595-123-4567, has been struggling to keep up with her science courses. The preparation of an academic probation letter, clear and unambiguous, is urgently required.' ### Format: '<NAME>:Name, <STUDENT_ID>:ID, <SIN>:Number, <EMAIL_ID>:Email, <PASSPORT>:Passport Number, <PHONE>:Phone Number' ### Expected Output: '<NAME>:Lily Evans, <STUDENT_ID>:103238, <SIN>:697654321, <EMAIL_ID>:lily.evans@univsphere.com, <PASSPORT>:EFGH67963, <PHONE>:595-123-4567'"
+                    }
+                    The features should only contain only the following personal information:
+             """

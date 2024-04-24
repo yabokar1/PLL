@@ -1,0 +1,32 @@
+[
+    {
+        "text": "### Task: Protect patient privacy by anonymizing the personal information in the provided details and output in specified format. ### Input: 'Full name: Linda Martinez, ID: 403291, Social Insurance Number: 789235411, Contact Number: 542-791-7685' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Linda Martinez <STUDENT_ID>:403291 <SIN>:789235411 <PHONE_NUMBER>:542-791-7685 "
+    },
+    {
+        "text": "### Task: Secure student details by changing personal identifiers in the following data and output in the obliged format. ### Input: 'Name: Robert King, Student ID: 607284, SIN: 862315974, Phone: 212-658-9241' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Robert King <STUDENT_ID>:607284 <SIN>:862315974 <PHONE_NUMBER>:212-658-9241 "
+    },
+    {
+        "text": "### Task: Mask the personal information in the following text and output in the decided format. ### Input: 'Name: Elizabeth Nova, Student ID: 509372, SIN: 931628747, Phone: 846-299-3125' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Elizabeth Nova <STUDENT_ID>:509372 <SIN>:931628747 <PHONE_NUMBER>:846-299-3125 "
+    },
+    {
+        "text": "### Task: Encode the personal identifiers in the given text and output in the required format. ### Input: 'Name: Brian Lex, Student ID: 745902, SIN: 601284973, Phone: 713-941-2728' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Brian Lex <STUDENT_ID>:745902 <SIN>:601284973 <PHONE_NUMBER>:713-941-2728 "
+    },
+    {
+        "text": "### Task: Anonymize the personal information in the listed data and conform it to the requested format. ### Input: 'Name: Pamela Swift, Student ID: 629183, SIN: 982163547, Phone: 965-726-1832' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Pamela Swift <STUDENT_ID>:629183 <SIN>:982163547 <PHONE_NUMBER>:965-726-1832 "
+    },
+    {
+        "text": "### Task: Obscure the personal information in the following content and translate it to the specified format. ### Input: 'Name: Justin Green, Enrollment ID: 892174, SIN: 369281547, Contact: 813-942-7623' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Justin Green <STUDENT_ID>:892174 <SIN>:369281547 <PHONE_NUMBER>:813-942-7623 "
+    },
+    {
+        "text": "### Task: Software should make the patient's personal data anonymous as per the provided information. ### Input: 'Patient's Name: Clara Benson, Patient's ID: 689123, SIN: 245698371, Phone Number: 975-891-2635' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Clara Benson <STUDENT_ID>:689123 <SIN>:245698371 <PHONE_NUMBER>:975-891-2635 "
+    },
+    {
+        "text": "### Task: Alter the following text to anonymize the clients personal info and format it as requested. ### Input: 'Client Name: Samuel Ford, Client ID: 256913, SIN: 679215384, Contact Info: 647-381-5923' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Samuel Ford <STUDENT_ID>:256913 <SIN>:679215384 <PHONE_NUMBER>:647-381-5923 "
+    },
+    {
+        "text": "### Task: Change the following text to anonymize the user's personal identifiers and match the required format. ### Input: 'User's Name: Henry Wells, User's ID: 987641, SIN: 369821754, Contact Number: 803-925-3168' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Henry Wells <STUDENT_ID>:987641 <SIN>:369821754 <PHONE_NUMBER>:803-925-3168 "
+    },
+    {
+        "text": "### Task: Modify the text below to hide the personal information and then follow the required format. ### Input: 'Participant Name: Amy Thompson, Registration ID: 563892, SIN: 587431296, Telephone: 619-492-3785' ### Format: '<NAME>:NAME, <STUDENT_ID>:STUDENT_ID, <SIN>:SIN, <PHONE_NUMBER>:PHONE_NUMBER, ' ### Expected Output: <NAME>:Amy Thompson <STUDENT_ID>:563892 <SIN>:587431296 <PHONE_NUMBER>:619-492-3785 "
+    }
+]
