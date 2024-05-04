@@ -16,7 +16,6 @@ class LLM(ABC):
     
 
 class OpenAI(LLM):
-
     def __init__(self):
         self.client = OpenAI(api_key=AppConfig.API_KEY)
         self.context_response = CONTEXT_RESPONSE
@@ -49,7 +48,6 @@ class OpenAI(LLM):
     
 
 class Llama(LLM):
-
     def __init__(self):
         self.endpoint_name = 'safegpt-model-endpoint'
         self.client = boto3.client("sagemaker-runtime")

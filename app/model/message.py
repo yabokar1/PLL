@@ -2,10 +2,8 @@ from app.config.database import Database
 from bson.objectid import ObjectId
 
 class Message:
-    
     def __init__(self):
         self.db = Database().get_client()['PLL']['Messages']
-
 
     def save(self,anonmyized,deanonmyized,prompt):
         data = {
@@ -34,18 +32,3 @@ class Message:
         object_id = ObjectId(id)
         result = self.table.collection.delete_one({'id': object_id})
         return result.deleted_count > 0
-    
-
-
-if __name__ == "__main__":
-
-    try:
-        id = '6583490f07593d94c553543f'
-        message_table = Message()
-        user_messages = message_table.get_all_messages()
-        print(user_messages)
-        message = message_table.get_message_by_id(id)
-        print(message)
-
-    except Exception as e:
-            print(e)

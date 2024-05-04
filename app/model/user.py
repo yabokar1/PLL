@@ -2,10 +2,8 @@ from app.config.database import Database
 import bcrypt
 
 class User:
-    
     def __init__(self):
         self.db = Database().get_client()['PLL']['User']
-
 
     def save(self,firstname,lastname,username,password):
         password = password.encode('utf-8')
@@ -36,18 +34,3 @@ class User:
     def delete(self,username):
         result = self.delete_one({'email': username})
         return result.deleted_count > 0
-    
-
-
-if __name__ == "__main__":
-
-    try:
-        # username = ''
-        user = User()
-        user.save('Yonis','Abokar','yabokar@gmail.com','Messenger1!')
-        user_messages = user.get_all_users()
-        print(user_messages)
-
-
-    except Exception as e:
-            print(e)
