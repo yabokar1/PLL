@@ -1,7 +1,14 @@
 Flask==3.0.0
+Flask-Cors==4.0.0
 openai==1.6.1
 pymongo==4.6.1
 python_bcrypt==0.3.2
 requests==2.26.0
 python-json-logger==2.0.7
+boto3==1.34.97
+sagemaker==2.218.0
+setuptools==69.5.1
+python-json-logger==2.0.7
+docker==7.0.0
+botocore==1.34.97
 
