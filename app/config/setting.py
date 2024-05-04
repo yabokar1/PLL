@@ -1,9 +1,8 @@
 import os 
 class AppConfig:
-    USER = os.environ.get('USER')
-    PASSWORD = os.environ.get('PASSWORD')
-    API_KEY = os.environ.get('OPEN_AI')
-    API_KEY = os.environ.get('API_KEY')
+    MONGO_USER = os.environ.get('MONGO_USER')
+    MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
+    OPEN_API_KEY = os.environ.get('OPEN_API_KEY')
     ANALYZE_URL = os.environ.get('ANALYZE_URL')
     ANONYMIZE_URL = os.environ.get('ANONYMIZE_URL')
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')

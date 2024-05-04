@@ -1,7 +1,4 @@
-import sys
-sys.path.append('/Users/yonisabokar/IBM_Data_AI/PLL')
 from app.config.database import Database
-from bson.objectid import ObjectId
 import bcrypt
 
 class User:

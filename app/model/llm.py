@@ -1,5 +1,3 @@
-import sys
-sys.path.append('/Users/yonisabokar/IBM_Data_AI/PLL')
 import boto3
 import json
 from abc import ABC, abstractmethod
