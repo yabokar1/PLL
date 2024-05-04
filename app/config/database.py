@@ -1,6 +1,3 @@
-import sys
-print(sys.path)
-sys.path.append('/Users/yonisabokar/IBM_Data_AI/PLL')
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from app.config.setting import AppConfig
@@ -32,11 +29,6 @@ if __name__ == "__main__":
          client.admin.command('ping')
          print("Pinged your deployment. You successfully connected to MongoDB!")
          print("Database is created !!")
-        #  user_collection = client['PLL']['Users']
-        #  user_collection.insert_one({'firstname': 'Yonis',
-        #                               'lastname': 'Abokar',
-        #                               'username': 'yabokar',
-        #                               'password': 'password'})
 
     except Exception as e:
             print(e)
