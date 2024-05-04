@@ -64,7 +64,6 @@ def deanonymize(user_text, anonymized_text):
             index = anonymized_list.index(item)
             anonymized_list[index] = user_dict['<STUDENT_ID>'] 
         if item == '<PASSPORT_ID>\n\n' or item == '<PASSPORT_ID>.\n\n' or item == '<PASSPORT_ID>' or item == '<PASSPORT_ID>.':
-            print("YES PASSPORT")
             index = anonymized_list.index(item)
             anonymized_list[index] = user_dict['<PASSPORT_ID>'] 
         if item == '<SIN>':
