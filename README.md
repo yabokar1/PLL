@@ -40,7 +40,7 @@ Docker Compose version v2.6.0
 ```
 ####      Verify Docker Compose is installed by running docker-compose --version.
 ```
-Docker Compose version v2.6.0
+Docker version 20.10.17, build 100c701
 ```
 ####      Run the following command to build and start the Docker containers
 ```
