@@ -16,26 +16,22 @@ passport_id_recognizer,
 )
 
 
-def presidio_user_dict(user_text):
-    user_text_list = user_text.split(' ')
-    entity_dict = {}
-    for index,item in enumerate(user_text_list):
-        if item == 'name':
-            name = user_text_list[index + 2] + " " + user_text_list[index + 3]
-            entity_dict['<NAME>'] = name
-        if item == 'student':
-            student_id = user_text_list[index + 3]
-            entity_dict['<STUDENT_ID>'] = student_id
-        if item == 'SIN':
-            sin_id = user_text_list[index + 3]
-            entity_dict['<SIN>'] = sin_id
-        if item == 'passport':
-            passport_id = user_text_list[index + 3]
-            entity_dict['<PASSPORT_ID>'] = passport_id
-    return entity_dict
+def create_entity_text(anonymize_text, user_text):
+    user_text_list = user_text.split()
+    anonymize_list = anonymize_text.split()
+    entity_str = ""
+    for index,item in enumerate(anonymize_list):
+        if item == "<PERSON>":
+            entity_str += f"<NAME>:{user_text_list[index]}  {user_text_list[index + 1]},"
+        elif item.startswith("<") and item.endswith(">") and item != user_text_list[index+1]:
+            if index < len(user_text_list) - 2:
+                entity_str += f"{item}:{user_text_list[index + 1]},"
+            else:
+                entity_str += f"{item}:{user_text_list[index + 1]}"
+    return entity_str
 
 
-def create_user_dict(user_text):
+def create_entity_dict(user_text):
     user_text_list = user_text.split(',')
     entity_dict = {}
     for item in user_text_list:
@@ -45,38 +41,18 @@ def create_user_dict(user_text):
         
 
 def deanonymize(user_text, anonymized_text):
-    anonymized_list = anonymized_text.split(' ')
-    user_dict = presidio_user_dict(user_text)
-    # user_dict = create_user_dict(user_text)
-
-    for index, item in enumerate(anonymized_list):
-        item = item.strip()
-        if item == '<NAME>':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<NAME>'] 
-        if item == '<NAME>,\n\nWe':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<NAME>'] + ',We'
-        if item == '<NAME>,\n\nI':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<NAME>'] + ',I'
-        if item == '<STUDENT_ID>,' or item == '<STUDENT_ID>':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<STUDENT_ID>'] 
-        if item == '<PASSPORT_ID>\n\n' or item == '<PASSPORT_ID>.\n\n' or item == '<PASSPORT_ID>' or item == '<PASSPORT_ID>.':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<PASSPORT_ID>'] 
-        if item == '<SIN>':
-            index = anonymized_list.index(item)
-            anonymized_list[index] = user_dict['<SIN>'] 
-            
-    deanonymized_text = ' '.join(anonymized_list)
+    entity_dict = create_entity_dict(user_text)
+    deanonymized_text = anonymized_text.replace('<NAME>', entity_dict['<NAME>'])\
+                                       .replace('<STUDENT_ID>', entity_dict['<STUDENT_ID>'])\
+                                       .replace('<PASSPORT_ID>', entity_dict['<PASSPORT_ID>'])\
+                                       .replace('<SIN>', entity_dict['<SIN>'])
     return deanonymized_text
 
-def llama_privacy_operation(anonmyized_data, user_input):
+def privacy_operation(anonmyized_data, user_input):
     try:
         if not anonmyized_data:
-            anonymize_text = llama_anonmyization(user_input)
+            # anonymize_text = llama_anonmyization(user_input)
+            anonymize_text = presidio_anonmyization(anonmyized_data, user_input)
             return anonymize_text 
         else:
             anonmyized_response = openai_response(anonmyized_data, user_input)
@@ -113,18 +89,8 @@ def llama_anonmyization(user_text):
         print("No match found")
     return extracted_text
 
-def presidio_privacy_operation(anonmyized_data, user_input):
-    if not anonmyized_data:
-        anonymize_text = presidio_anonmyization(user_input)
-        user_dict = presidio_user_dict(user_input)
-        return anonymize_text + str(user_dict)
-    else:
-        anonmyized_response = openai_response(anonmyized_data, user_input)
-        deanonmyized_response = deanonymize(anonmyized_data, anonmyized_response)
-        response = "----------Anonmyized Response:" + anonmyized_response + "----------Deanonmyized Response:" + deanonmyized_response
-        return response
 
-def presidio_anonmyization(user_text):
+def presidio_anonmyization(anonymize_text, user_text):
     analyze_response = requests.post(AppConfig.ANALYZE_URL, json={"text": user_text, 
     "language": "en", "ad_hoc_recognizers": [
             student_id_recognizer, 
@@ -143,7 +109,8 @@ def presidio_anonmyization(user_text):
     if anonymize_response.status_code != 200:
         return f"Error in anonymization: {anonymize_response.text}"
     anonymize_text = anonymize_response.json().get('text', 'No text returned from anonymization')
-    return anonymize_text
+    entity_text = create_entity_text(anonymize_text, user_text)
+    return entity_text
 
 
 
@@ -153,7 +120,7 @@ def train():
     session = Session()
     estimator = JumpStartEstimator(
         model_id=model_id,
-        environment={"accept_eula": "true"},  # set "accept_eula": "true" to accept the EULA for gated models
+        environment={"accept_eula": "true"},
         disable_output_compression=True,
         hyperparameters={
             "instruction_tuned": "False",
@@ -228,7 +195,10 @@ def openai_generate_dataset(entities_dict):
     
     input_str += " has not met their academic goals in psychology. The university is set to issue a direct academic probation letter" 
     sample_text = f"\"text\": ### Task: Anonymize the personal information in the following text and output in the specified format. ### Input: '{input_str}' ### Format: '{format_str}'  ### Expected Output: {output_str}"
-    context = f"""  Generate 10 data points similar to the following format for only these dataset features ${format_str}, but the personal identifiers should be different and unique for all data points and should have variations while keeping the structure the same. Make sure all the personal identifiers are different for all the data points that will be generated. Refer from these examples and don't include Data Point 1: or any Data Point N in the response and include the dataset between {{}}
+
+    context = f"""  Generate 10 data points similar to the following format for only these dataset features ${format_str}, but the personal identifiers should be different and unique for all data points and should have 
+                    variations while keeping the structure the same. Make sure all the personal identifiers are different for all the data points that will be generated. Refer from these examples and don't include 
+                    Data Point 1: or any Data Point N in the response and include the dataset between {{}}
                     between dataset responses:
                     {
                         {sample_text}

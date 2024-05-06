@@ -22,7 +22,7 @@ def index():
 def anonymize():
     user_data = request.get_json().get('secret')
     user_input = request.get_json().get('input')
-    message = presidio_privacy_operation(user_data, user_input)
+    message = privacy_operation(user_data, user_input)
     # deanonymize_text = deanonymize_data(user_text,anonymize_text)
     response = {"message": message}
     return jsonify(response)
