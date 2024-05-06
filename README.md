@@ -17,19 +17,23 @@ Seamless integration with public LLM APIs such as ChatGPT for sending anonymized
 #### 1) Ensure you have the necessary dependencies installed.
 #### 2) Clone the SafeGPT Backend repository to your local machine.
 #### 3) Configure the backend settings according to your requirements.
-#### 4) Set up environment variables:
+#### 4) Install dependencies.
+```
+pip install -r requirements.txt
+```
+#### 5) Set up environment variables:
 ```
 export ANALYZE_URL=http://localhost:5001/analyze
 export ANONYMIZE_URL=http://localhost:5002/anonymize
 ...
 ```
 
-#### 5) Run the backend server locally:
+#### 6) Run the backend server locally:
 ```
 flask --app app run --debug
 ```
 
-#### 6) Alternatively, if you want to run the app using Docker containers:
+#### 7) Alternatively, if you want to run the app using Docker containers:
 Ensure Docker is installed on your system. You can check by running `docker -v` and it should return something like:
 ```
 Docker Compose version v2.6.0
